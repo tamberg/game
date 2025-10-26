@@ -5,6 +5,7 @@ A simple game, inspired by Vito and Sorin.
 - Pick a column.
 - Push some dots.
 - Last dot loses.
+- Pass to peer.
 
 ## Proof
 - To do.
