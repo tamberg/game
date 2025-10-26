@@ -12,7 +12,7 @@ A simple game, inspired by Vito and Sorin.
 - Pass board to peer.
 
 ## Loses
-- Last dot loses.
+- Last dot loses, i.e.
 - => 1 dot left, you win.
 - => 0 dots left, you lose.
 
