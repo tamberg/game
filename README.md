@@ -16,4 +16,10 @@ A simple game, inspired by Vito and Sorin.
 - => 0 left you lose.
 
 ## Proof
-- To do.
+- Is it a game?
+- Strategies?
+- To do
+
+## Code
+- [C/game.c](C/game.c)
+- [MyGameApp/.../MainActivity.kt]()
