@@ -9,7 +9,7 @@ A simple game, inspired by Vito and Sorin.
 ## Rules
 - Pick a column.
 - Push some dots.
-- Pass to peer.
+- Pass board to peer.
 
 ## Loses
 - Last dot loses.
