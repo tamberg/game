@@ -1,13 +1,19 @@
 # Game
 A simple game, inspired by Vito and Sorin.
 
+## Board
+- Columns with n dots.
+- n = 3, 5, 6, 6, 5, 3
+
 ## Rules
 - Pick a column.
 - Push some dots.
-- Last<sup>*</sup> dot loses.
 - Pass to peer.
 
-<sup>*</sup>On the board.
+## Loses
+- Last dot loses.
+- => 1 left you win.
+- => 0 left you lose.
 
 ## Proof
 - To do.
