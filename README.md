@@ -2,6 +2,7 @@
 A simple game, inspired by Vito and Sorin.
 
 ## Board
+> [Push pop bubble fidget](https://duckduckgo.com/?q=push+pop+fidget&t=osx&ia=images&iax=images)
 - Columns with n dots.
 - n = 3, 5, 6, 6, 5, 3.
 
