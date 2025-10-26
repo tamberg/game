@@ -7,7 +7,7 @@ A simple game, inspired by Vito and Sorin.
 - Last<sup>*</sup> dot loses.
 - Pass to peer.
 
-<sup>*</sup>Overall.
+<sup>*</sup>On the board.
 
 ## Proof
 - To do.
