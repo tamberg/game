@@ -21,5 +21,6 @@ A simple game, inspired by Vito and Sorin.
 - Strategies?
 
 ## Code
+> Work in progress
 - [C/game.c](C/game.c)
 - [MyGameApp/.../MainActivity.kt](Android/MyGameApp/app/src/main/java/org/tamberg/mygameapp/MainActivity.kt)
