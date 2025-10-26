@@ -13,9 +13,8 @@ A simple game, inspired by Vito and Sorin.
 
 ## Loses
 - Last dot loses.
-
-=> 1 left, you win.
-=> 0 left, you lose.
+- => 1 dot left, you win.
+- => 0 dots left, you lose.
 
 ## Proof
 > To do
