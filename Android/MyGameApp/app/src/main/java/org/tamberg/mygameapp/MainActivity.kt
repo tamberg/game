@@ -96,7 +96,7 @@ fun MyGameScreen(
         Spacer(modifier = Modifier.weight(0.1f))
         Row(modifier = Modifier.fillMaxWidth().weight(0.1f),
             horizontalArrangement = Arrangement.SpaceEvenly) {
-            Text("Give app to other player...", fontSize = 23.sp)
+            Text("Tap some boxes...", fontSize = 23.sp)
         }
         Spacer(modifier = Modifier.weight(0.1f))
         Row(modifier = Modifier.fillMaxWidth().weight(0.8f),
@@ -109,7 +109,7 @@ fun MyGameScreen(
         Row(modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceEvenly) {
             Button(onClick = {}) {
-                Text("Ready")
+                Text("Next")
             }
         }
         Spacer(modifier = Modifier.weight(0.1f))
