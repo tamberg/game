@@ -66,6 +66,7 @@ class MyGameDotModel(val col: MyGameColModel) {
                 c.setSelected2(false)
             }
             col.setSelected2(true)
+            col.board.model.stepEnabled = true
         }
         update()
     }
@@ -94,7 +95,7 @@ class MyGameColModel(val board: MyGameBoardModel, n: Int) {
     }
 }
 
-class MyGameBoardModel() {
+class MyGameBoardModel(val model: MyGameViewModel) {
     var enabled by mutableStateOf(false)
         private set
 
@@ -129,7 +130,9 @@ class MyGameViewModel: ViewModel() {
     var state = State.START
     var info by mutableStateOf("");
     var label by mutableStateOf("");
-    val board = MyGameBoardModel()
+    var stepEnabled by mutableStateOf(false)
+
+    val board = MyGameBoardModel(this)
 
     fun update() {
         if (state == State.START) {
@@ -142,6 +145,7 @@ class MyGameViewModel: ViewModel() {
                 col.setSelected2(true)
             }
             board.setActivated2(false)
+            stepEnabled = true
         } else if (state == State.PLAY) {
             for (col in board.cols) {
                 col.setSelected2(true)
@@ -149,18 +153,22 @@ class MyGameViewModel: ViewModel() {
             info = "Tap some boxes..."
             label = "Next"
             board.setActivated2(true)
+            stepEnabled = false
         } else if (state == State.PASS) {
-            info = "Pass to peer..."
+            info = "Pass to other player..."
             label = "Ready"
             board.setActivated2(false)
+            stepEnabled = true
         } else if (state == State.WIN) {
-            info = "You win..."
-            label = "Play again"
+            info = "You win :)"
+            label = "Again"
             board.setActivated2(false)
+            stepEnabled = true
         } else if (state == State.LOSE) {
-            info = "You lose..."
-            label = "Play again"
+            info = "You lose :("
+            label = "Again"
             board.setActivated2(false)
+            stepEnabled = true
         }
     }
 
@@ -253,7 +261,7 @@ fun MyGameScreen(
         Spacer(modifier = Modifier.weight(0.1f))
         Row(modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceEvenly) {
-            Button(onClick = { model.step() }) {
+            Button(onClick = { model.step() }, enabled = model.stepEnabled) {
                 Text(model.label)
             }
         }
