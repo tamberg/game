@@ -7,11 +7,13 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -24,6 +26,7 @@ import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import org.tamberg.mygameapp.ui.theme.MyGameAppTheme
@@ -88,11 +91,28 @@ fun MyGameScreen(
     modifier: Modifier = Modifier,
     model: MyGameViewModel = viewModel()
 ) {
-    Row(modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceEvenly) {
-        for (col in model.cols) {
-            MyGameColumn(col)
+    Column(modifier = modifier,
+        verticalArrangement = Arrangement.SpaceEvenly) {
+        Spacer(modifier = Modifier.weight(0.1f))
+        Row(modifier = Modifier.fillMaxWidth().weight(0.1f),
+            horizontalArrangement = Arrangement.SpaceEvenly) {
+            Text("Give app to other player...", fontSize = 23.sp)
         }
+        Spacer(modifier = Modifier.weight(0.1f))
+        Row(modifier = Modifier.fillMaxWidth().weight(0.8f),
+            horizontalArrangement = Arrangement.SpaceEvenly) {
+            for (col in model.cols) {
+                MyGameColumn(col)
+            }
+        }
+        Spacer(modifier = Modifier.weight(0.1f))
+        Row(modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceEvenly) {
+            Button(onClick = {}) {
+                Text("Ready")
+            }
+        }
+        Spacer(modifier = Modifier.weight(0.1f))
     }
 }
 
