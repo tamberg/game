@@ -47,41 +47,191 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-class MyGameDotData(b: Boolean) {
-    var state by mutableStateOf(b)
+class MyGameDotModel(val col: MyGameColModel) {
+    var enabled by mutableStateOf(true)
+        private set
+
+    var checked by mutableStateOf(true)
+        private set
+
+    fun update() {
+        enabled = checked && col.enabled
+    }
+
+    fun setChecked2(value: Boolean) {
+        //assert(col.enabled)
+        checked = value
+        if (value == false) {
+            for (c in col.board.cols) {
+                c.setSelected2(false)
+            }
+            col.setSelected2(true)
+        }
+        update()
+    }
 }
 
-class MyGameColData(n: Int) {
-    val dots = Array(n) { MyGameDotData(true) }
+class MyGameColModel(val board: MyGameBoardModel, n: Int) {
+    var enabled by mutableStateOf(false)
+        private set
+
+    var selected by mutableStateOf(false)
+        private set
+
+    val dots = Array(n) { MyGameDotModel(this) }
+
+    fun update() {
+        enabled = selected && board.enabled
+        for (dot in dots) {
+            dot.update()
+        }
+    }
+
+    fun setSelected2(value: Boolean) {
+        //assert(board.enabled)
+        selected = value
+        update();
+    }
 }
+
+class MyGameBoardModel() {
+    var enabled by mutableStateOf(false)
+        private set
+
+    var activated by mutableStateOf(false)
+        private set
+
+    val cols = listOf(
+        MyGameColModel(this, 3),
+        MyGameColModel(this, 5),
+        MyGameColModel(this, 6),
+        MyGameColModel(this, 6),
+        MyGameColModel(this, 5),
+        MyGameColModel(this, 3)
+    )
+
+    fun update() {
+        enabled = activated
+        for (col in cols) {
+            col.update()
+        }
+    }
+
+    fun setActivated2(value: Boolean) {
+        activated = value
+        update()
+    }
+}
+
+enum class State { START, PLAY, PASS, WIN, LOSE }
 
 class MyGameViewModel: ViewModel() {
-    val cols = listOf(
-        MyGameColData(3),
-        MyGameColData(5),
-        MyGameColData(6),
-        MyGameColData(6),
-        MyGameColData(5),
-        MyGameColData(3))
+    var state = State.START
+    var info by mutableStateOf("");
+    var label by mutableStateOf("");
+    val board = MyGameBoardModel()
+
+    fun update() {
+        if (state == State.START) {
+            info = "Bubble Game"
+            label = "Start"
+            for (col in board.cols) {
+                for (dot in col.dots) {
+                    dot.setChecked2(true)
+                }
+                col.setSelected2(true)
+            }
+            board.setActivated2(false)
+        } else if (state == State.PLAY) {
+            for (col in board.cols) {
+                col.setSelected2(true)
+            }
+            info = "Tap some boxes..."
+            label = "Next"
+            board.setActivated2(true)
+        } else if (state == State.PASS) {
+            info = "Pass to peer..."
+            label = "Ready"
+            board.setActivated2(false)
+        } else if (state == State.WIN) {
+            info = "You win..."
+            label = "Play again"
+            board.setActivated2(false)
+        } else if (state == State.LOSE) {
+            info = "You lose..."
+            label = "Play again"
+            board.setActivated2(false)
+        }
+    }
+
+    private fun count(): Int {
+        var count = 0
+        for (col in board.cols) {
+            for (dot in col.dots) {
+                if (dot.checked) {
+                    count++
+                }
+            }
+        }
+        return count
+    }
+
+    fun step() {
+        if (state == State.START) {
+            state = State.PLAY
+        } else if (state == State.PLAY) {
+            val count = count()
+            if (count == 1) {
+                state = State.WIN
+            } else if (count == 0) {
+                state = State.LOSE
+            } else {
+                state = State.PASS
+            }
+        } else if (state == State.PASS) {
+            state = State.PLAY
+        } else if (state == State.WIN) {
+            state = State.START
+        } else if (state == State.LOSE) {
+            state = State.START
+        }
+        update()
+    }
+
+    init {
+        update()
+    }
 }
 
 @Composable
 fun MyGameColumn(
-    colData: MyGameColData,
+    col: MyGameColModel,
     modifier: Modifier = Modifier) {
     Column(
         modifier = Modifier.fillMaxHeight(),
         verticalArrangement = Arrangement.SpaceEvenly)
     {
         Column {
-            for (dot in colData.dots) {
+            for (dot in col.dots) {
                 Checkbox(
-                    enabled = dot.state,
-                    checked = dot.state,
+                    enabled = dot.enabled,
+                    checked = dot.checked,
                     onCheckedChange = {
-                        dot.state = it
+                        dot.setChecked2(it)
                     })
             }
+        }
+    }
+}
+
+@Composable
+fun MyGameBoard(
+    board: MyGameBoardModel,
+    modifier: Modifier = Modifier) {
+    Row(modifier = modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceEvenly) {
+        for (col in board.cols) {
+            MyGameColumn(col)
         }
     }
 }
@@ -96,20 +246,15 @@ fun MyGameScreen(
         Spacer(modifier = Modifier.weight(0.1f))
         Row(modifier = Modifier.fillMaxWidth().weight(0.1f),
             horizontalArrangement = Arrangement.SpaceEvenly) {
-            Text("Tap some boxes...", fontSize = 23.sp)
+            Text(model.info, fontSize = 23.sp)
         }
         Spacer(modifier = Modifier.weight(0.1f))
-        Row(modifier = Modifier.fillMaxWidth().weight(0.8f),
-            horizontalArrangement = Arrangement.SpaceEvenly) {
-            for (col in model.cols) {
-                MyGameColumn(col)
-            }
-        }
+        MyGameBoard(board = model.board, modifier = Modifier.weight(0.8f))
         Spacer(modifier = Modifier.weight(0.1f))
         Row(modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceEvenly) {
-            Button(onClick = {}) {
-                Text("Next")
+            Button(onClick = { model.step() }) {
+                Text(model.label)
             }
         }
         Spacer(modifier = Modifier.weight(0.1f))
